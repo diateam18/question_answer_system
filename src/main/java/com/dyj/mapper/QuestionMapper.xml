@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dyj.mapper.QuestionMapper">
+    <!--private String issue;
+    private Integer number;
+    private Date lastRevise;
+    private String detail;-->
+    <resultMap id="questionMap" type="com.dyj.domain.Question">
+        <id property="id" column="ID"/>
+        <result property="issue" column="ISSUE"></result>
+        <result property="number" column="NUMBER"></result>
+        <result property="lastRevise" column="LAST_REVISE"></result>
+        <result property="detail" column="DETAIL"></result>
+    </resultMap>
+
+    <select id="findAll" parameterType="Question" resultMap="questionMap">
+        SELECT ID,ISSUE,NUMBER,LAST_REVISE,DETAIL from question ORDER BY LAST_REVISE DESC
+    </select>
+
+    <select id="findById" parameterType="int" resultMap="questionMap">
+        SELECT ID,ISSUE,NUMBER,LAST_REVISE,DETAIL FROM QUESTION WHERE id=#{ID}
+    </select>
+
+   <update id="updateQuestion" parameterType="Question">
+        UPDATE question
+        <set>
+            <if test="number!=null">NUMBER=NUMBER+1,</if>
+            <if test="lastRevise!=null">LAST_REVISE=#{lastRevise}</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+    <insert id="addQuestion" parameterType="Question" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO QUESTION (ISSUE,NUMBER,DETAIL,LAST_REVISE) VALUES (#{issue},0,#{detail},now())
+    </insert>
+
+
+</mapper>
